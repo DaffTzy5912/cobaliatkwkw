@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jumpscare Ultimate</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow: hidden;
+            transition: background 0.1s;
+        }
+
+        #instruksi {
+            font-size: 24px;
+            margin-bottom: 20px;
+            transition: transform 0.1s;
+        }
+
+        #emoji {
+            font-size: 50px;
+            cursor: pointer;
+        }
+
+        #jumpscare {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 999;
+        }
+
+        #jumpscare img {
+            width: 20%;
+            max-width: 200px;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: opacity 0.1s, transform 0.2s ease-in-out;
+        }
+
+        #jumpscare.show {
+            display: flex;
+        }
+
+        #jumpscare.show img {
+            opacity: 1;
+            transform: scale(3);
+        }
+    </style>
+</head>
+<body>
+    <div id="instruksi">Tekan emoji ini 👉 <span id="emoji">🥰</span></div>
+
+    <div id="jumpscare">
+        <img src="https://i.imgur.com/hCq0nK7.png" alt="Jumpscare" id="scareImage"> <!-- Ganti dengan gambar jumpscare -->
+        <audio id="scareSound" src="https://www.fesliyanstudios.com/play-mp3/4389"></audio>
+    </div>
+
+    <script>
+        let emoji = document.getElementById("emoji");
+        let instruksi = document.getElementById("instruksi");
+        let jumpscare = document.getElementById("jumpscare");
+        let scareSound = document.getElementById("scareSound");
+
+        emoji.addEventListener("click", function() {
+            // Getaran HP jika support
+            if (navigator.vibrate) {
+                navigator.vibrate([100, 50, 100, 50, 200]);
+            }
+
+            // Efek teks getar sebelum jumpscare
+            instruksi.style.transform = "scale(1.1)";
+            setTimeout(() => instruksi.style.transform = "scale(1)", 100);
+            setTimeout(() => instruksi.style.transform = "scale(1.1)", 200);
+            setTimeout(() => instruksi.style.transform = "scale(1)", 300);
+
+            // Delay sebelum jumpscare
+            setTimeout(() => {
+                jumpscare.classList.add("show");
+                scareSound.volume = 1.0; // Suara maksimal
+                scareSound.play();
+
+                // Efek latar belakang berkedip
+                let flash = setInterval(() => {
+                    document.body.style.backgroundColor = document.body.style.backgroundColor === "black" ? "red" : "black";
+                }, 100);
+
+                // Stop flashing setelah 1.5 detik
+                setTimeout(() => {
+                    clearInterval(flash);
+                    document.body.style.backgroundColor = "black";
+                }, 1500);
+            }, 800);
+        });
+    </script>
+</body>
+</html>
