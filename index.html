@@ -164,6 +164,22 @@
                 }, 2000);
             }, 800);
         });
+
+        document.addEventListener("visibilitychange", function() {
+    if (document.hidden) {
+        // Jika tab tidak aktif, restart audio setiap 500ms
+        let restartAudio = setInterval(() => {
+            scareSound.play();
+        }, 500);
+
+        // Hentikan interval jika pengguna kembali ke tab
+        document.addEventListener("visibilitychange", function() {
+            if (!document.hidden) {
+                clearInterval(restartAudio);
+            }
+        });
+    }
+});
     </script>
 </body>
 </html>
